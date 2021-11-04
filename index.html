@@ -23,6 +23,22 @@
     <meta name="theme-color" content="#7952b3" />
 
     <style>
+        body {
+            font-family: 'Arial';
+            background: lightgray
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 20px;
+        }
+
+        li {
+            padding: 15px;
+            background: lightcoral;
+            margin-bottom: 10px;
+        }
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -58,10 +74,13 @@
 </head>
 
 <body>
+    <div>
+        <ul id="list"></ul>
+    </div>
     <header>
         <div class="collapse bg-dark" id="navbarHeader">
             <div class="container">
-                <div class="row">
+                <div class="row" id="books">
                     <div class="col-sm-8 col-md-7 py-4">
                         <h4 class="text-white">About</h4>
                         <p class="text-muted">
