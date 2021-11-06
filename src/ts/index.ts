@@ -38,10 +38,6 @@ interface BookItem {
   id: string;
 }
 
-function fun() {
-  return 15;
-}
-
 const getBooks = (booktitle: string) => {
   // const { from } = rxjs; // I can use this in production
   const apiUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
@@ -63,8 +59,7 @@ const getBooks = (booktitle: string) => {
       }),
       // tap((book: Book) => console.log(book))
       tap(() => {
-        count++;
-        return;
+        return count++;
       })
     )
     .subscribe((book: Book) => displayBook(book, count));
@@ -72,10 +67,11 @@ const getBooks = (booktitle: string) => {
 
 const bookPrice = () => {
   let price = Math.floor(Math.random() * 25);
+  // price = 0;
   if (price > 0) {
     return `<strong>Price ${price} &#xa3;</strong><br>Sign in to apply a first buy coupon discount of 20%`;
   } else {
-    return `We are sorry, this book is not currently available`;
+    return `<span class="not-available">We are sorry, this book is not currently available</span>`;
   }
 };
 
@@ -170,6 +166,13 @@ const checkboxesClicker = () => {
     // console.log(inputs);
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
+      if (input.closest('.modal-body').querySelector('.not-available')) {
+        // console.log('no book');
+        input
+          .closest('.modal-body')
+          .querySelector('.container.shipping')
+          .classList.add('hidden');
+      }
       input.addEventListener('click', function () {
         // console.log(this, 'click');
         if (this.checked === false) {

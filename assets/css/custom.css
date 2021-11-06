@@ -64,6 +64,10 @@ legend small {
   min-width: 450px;
 }
 
+.container.shipping.hidden {
+  display: none;
+}
+
 /* button svg {
   margin: -2px 2px 0 0;
 } */
