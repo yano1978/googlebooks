@@ -1,0 +1,72 @@
+body {
+  background: lightgray;
+}
+
+h6 {
+  font-weight: 600;
+}
+
+h6.card-book {
+  padding-bottom: 1em;
+}
+
+/* .card {
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+  border-radius: 0;
+  border: 0;
+  margin-bottom: 1.5em;
+}
+
+.card:hover {
+  transform: scale(1.1);
+} */
+
+.card img {
+  margin: 0.75em;
+}
+
+button svg {
+  margin: -5px 2px 0 0;
+}
+
+span.app-title {
+  font-weight: 800;
+  margin-left: 0.5em;
+}
+
+.card-footer-wrapper .btn-group {
+  background-color: #fff;
+}
+
+a[aria-expanded='true']:after {
+  content: 'less';
+  padding: 0 0.25rem 0 0;
+}
+
+a[aria-expanded='false']:after {
+  content: 'more';
+}
+
+.btn:focus,
+.btn-close:focus,
+.btn:active,
+.btn:active:focus,
+.btn:focus-visible,
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
