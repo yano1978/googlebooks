@@ -10,6 +10,14 @@ h6.card-book {
   padding-bottom: 1em;
 }
 
+/* .btn.buy {
+  padding: 0.275em 1.4em;
+} */
+
+.btn-outline-secondary.active {
+  background-color: #cc0000;
+}
+
 /* .card {
   transition: transform 0.2s ease;
   box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
@@ -23,12 +31,15 @@ h6.card-book {
 } */
 
 .card img {
-  margin: 0.75em;
+  /* margin: 0.75em; */
+  min-width: 100%;
+  width: auto;
+  height: auto;
 }
 
-button svg {
-  margin: -5px 2px 0 0;
-}
+/* button svg {
+  margin: -2px 2px 0 0;
+} */
 
 span.app-title {
   font-weight: 800;
@@ -53,7 +64,8 @@ a[aria-expanded='false']:after {
 .btn:active,
 .btn:active:focus,
 .btn:focus-visible,
-.navbar-toggler:focus {
+.navbar-toggler:focus,
+.btn-outline-secondary.active:focus {
   box-shadow: none;
 }
 

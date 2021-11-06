@@ -81,15 +81,20 @@ const displayBook = (book: Book, count: number) => {
                       <div class="card-body d-flex flex-column">
                           <h6 class="card-book">${book.title}</h6>
                           <p class="card-text collapse" id="more-${count}">
-                            ${book.description}
+                            ${book.description || ''}
                           </p>
                           <div class="card-footer-wrapper d-flex justify-content-between align-items-center">
                               <div class="btn-group">
                                   <a class="btn btn-sm btn-outline-secondary mt-auto" data-bs-toggle="collapse" href="#more-${count}" role="button" aria-expanded="false" aria-controls="#more-${count}">
                                     Read
                                   </a>
-                                  <button type="button" class="btn btn-sm btn-outline-secondary mt-auto" data-bs-toggle="modal" data-bs-target="#buy-book-${count}">
+                                  <button type="button" class="btn btn-sm btn-outline-secondary mt-auto buy" data-bs-toggle="modal" data-bs-target="#buy-book-${count}">
                                     Buy
+                                  </button>
+                                  <button data-bs-toggle="button" type="button" class="btn btn-sm btn-outline-secondary mt-auto like">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                      <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                    </svg>
                                   </button>
                               </div>
                           </div>
@@ -120,7 +125,7 @@ const displayBook = (book: Book, count: number) => {
                     </div>
                   `;
   const div = document.createElement('div');
-  div.setAttribute('class', 'col');
+  div.setAttribute('class', 'col col-lg-3');
   div.innerHTML = bookTpl;
   document.querySelector('#books').appendChild(div);
 };
