@@ -10,9 +10,11 @@ h6.card-book {
   padding-bottom: 1em;
 }
 
-/* .btn.buy {
-  padding: 0.275em 1.4em;
-} */
+.btn.buy svg {
+  position: relative;
+  left: -1px;
+  top: -2px;
+}
 
 .btn-outline-secondary.active {
   background-color: #cc0000;
@@ -35,6 +37,31 @@ h6.card-book {
   min-width: 100%;
   width: auto;
   height: auto;
+}
+
+legend {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+legend small {
+  display: block;
+  font-weight: 400;
+  font-size: 1em;
+}
+
+.checkbox {
+  accent-color: #6c757d;
+}
+.checkbox-main {
+  padding: 1em 0;
+}
+.container.shipping {
+  margin: 0.5em -1em;
+}
+
+.container.shipping form {
+  min-width: 450px;
 }
 
 /* button svg {

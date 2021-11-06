@@ -38,6 +38,10 @@ interface BookItem {
   id: string;
 }
 
+function fun() {
+  return 15;
+}
+
 const getBooks = (booktitle: string) => {
   // const { from } = rxjs; // I can use this in production
   const apiUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
@@ -59,7 +63,8 @@ const getBooks = (booktitle: string) => {
       }),
       // tap((book: Book) => console.log(book))
       tap(() => {
-        return count++;
+        count++;
+        return;
       })
     )
     .subscribe((book: Book) => displayBook(book, count));
@@ -109,15 +114,43 @@ const displayBook = (book: Book, count: number) => {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                     ${bookPrice()}
+                                ${bookPrice()}
+                                <div class="container shipping">
+                                      <div class="row">
+                                              <div class="col">
+                                                  <form>
+                                                      <legend>Select shipping options<small>Choose how you want us to deliver you purchase:</small>
+                                                      </legend>
+                                                      <div class="checkbox-main">
+                                                          <input type="button" id="checkall-${count}" class="checkall btn btn-sm btn-outline-secondary mt-auto" value="Check All">
+                                                      </div>
+                                                      <div class="checkbox">
+                                                          <label>
+                                                              <input type="checkbox" class="check"> USPS First Class - <strong>5.70 &#xa3;</strong>
+                                                          </label>
+                                                      </div>
+                                                      <div class="checkbox">
+                                                          <label>
+                                                              <input type="checkbox" class="check"> Package protection- <strong>2.30 &#xa3;</strong>
+                                                          </label>
+                                                      </div>
+                                                      <div class="checkbox">
+                                                          <label>
+                                                              <input type="checkbox" class="check"> Next Day Delivery - <strong>10 &#xa3;</strong>
+                                                          </label>
+                                                      </div>
+                                                  </form>
+                                              </div>
+                                          </div>
+                                      </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-sm btn-outline-secondary mt-auto" data-bs-dismiss="modal">Go back</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mt-auto">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary mt-auto buy">
                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket" viewBox="0 0 16 16">
                                         <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
                                       </svg>
-                                      Add to cart
+                                      Checkout
                                     </button>
                                 </div>
                             </div>
@@ -131,3 +164,50 @@ const displayBook = (book: Book, count: number) => {
 };
 
 getBooks('game of thrones');
+
+const checkboxesClicker = () => {
+  [document.querySelectorAll('*[id^="checkall-"]')].forEach(function (inputs) {
+    // console.log(inputs);
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      input.addEventListener('click', function () {
+        // console.log(this, 'click');
+        if (this.checked === false) {
+          this.value = 'Uncheck All';
+          this.checked = true;
+        } else {
+          this.value = 'Check All';
+          this.checked = false;
+        }
+        const checkboxesList =
+          this.parentNode.parentNode.querySelectorAll('.check');
+        // console.log(checks);
+        for (let x = 0; x < checkboxesList.length; x++) {
+          const singleCheck = checkboxesList[x];
+          // console.log(this);
+          if (this.checked === true) {
+            singleCheck.checked = true;
+          } else {
+            singleCheck.checked = false;
+          }
+        }
+      });
+    }
+  });
+};
+
+const checkboxesActivator = () => {
+  checkElement('.checkall').then(() => {
+    // console.log(ele);
+    // checkboxes();
+    checkboxesClicker();
+  });
+};
+const checkElement = async (ele: any) => {
+  while (document.querySelector(ele) === null) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+  return document.querySelector(ele);
+};
+
+checkboxesActivator();
