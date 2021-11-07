@@ -197,7 +197,7 @@ const searchBook = () => {
     // getBooks('game of thrones');
   }
 };
-// searchBook();
+searchBook();
 
 const searchButtonOnClick = () => {
   const btnSearch = document.querySelector('#searchButton');
@@ -207,6 +207,7 @@ const searchButtonOnClick = () => {
     console.log(searchValue);
     let count = 0;
     if (searchValue) {
+      cleanBooks();
       getBooks(searchValue)
         .pipe(
           tap(() => {
@@ -219,6 +220,18 @@ const searchButtonOnClick = () => {
 };
 
 searchButtonOnClick();
+
+const cleanSearchOnClick = () => {
+  const btnSearch = document.querySelector('#cleanButton');
+  btnSearch.addEventListener('click', function () {
+    (document.getElementById('search') as HTMLInputElement).value = '';
+    cleanBooks();
+  });
+};
+
+cleanSearchOnClick();
+
+getBooks('game of thrones');
 
 const cleanBooks = () => {
   const books = document.querySelector('#books');
