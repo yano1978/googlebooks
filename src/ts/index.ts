@@ -1,5 +1,5 @@
 import 'bootstrap';
-import { from, map, switchMap, tap } from 'rxjs';
+import { fromEvent, map, switchMap, tap, from, filter } from 'rxjs';
 
 // declare const rxjs: any; // I can use this in production
 
@@ -44,25 +44,24 @@ const getBooks = (booktitle: string) => {
   const p = fetch(apiUrl + booktitle).then((res) => res.json());
   // .then((books) => console.log(books));
   let count = 0;
-  from(p)
-    .pipe(
-      switchMap((data: GoogleBook) => from(data.items)),
-      map((ele: BookItem) => {
-        const book: Book = {
-          title: ele.volumeInfo.title,
-          categories: ele.volumeInfo.categories,
-          authors: ele.volumeInfo.authors,
-          description: ele.volumeInfo.description,
-          thumbnail: ele.volumeInfo.imageLinks.thumbnail,
-        };
-        return book;
-      }),
-      // tap((book: Book) => console.log(book))
-      tap(() => {
-        return count++;
-      })
-    )
-    .subscribe((book: Book) => displayBook(book, count));
+  from(p).pipe(
+    switchMap((data: GoogleBook) => from(data.items || [])),
+    map((ele: BookItem) => {
+      const book: Book = {
+        title: ele.volumeInfo.title,
+        categories: ele.volumeInfo.categories,
+        authors: ele.volumeInfo.authors,
+        description: ele.volumeInfo.description,
+        thumbnail: ele.volumeInfo.imageLinks.thumbnail,
+      };
+      return book;
+    }),
+    // tap((book: Book) => console.log(book))
+    tap(() => {
+      return count++;
+    })
+  );
+  // .subscribe((book: Book) => displayBook(book, count));
 };
 
 const bookPrice = () => {
@@ -156,10 +155,25 @@ const displayBook = (book: Book, count: number) => {
   const div = document.createElement('div');
   div.setAttribute('class', 'col col-lg-3');
   div.innerHTML = bookTpl;
-  document.querySelector('#books').appendChild(div);
+  const books = document.querySelector('#books');
+  if (books) {
+    books.appendChild(div);
+  }
 };
 
-getBooks('game of thrones');
+const searchBook = () => {
+  const searchEle = document.querySelector('#search');
+  if (searchEle) {
+    fromEvent(searchEle, 'keyup')
+      .pipe(
+        map((ele: any) => ele.target.value),
+        filter((ele: string) => ele.length > 2)
+      )
+      .subscribe((search: string) => console.log(search));
+    getBooks('game of thrones');
+  }
+};
+searchBook();
 
 const addShipmentPrice = () => {
   [document.querySelectorAll('.check')].forEach(function (items) {
