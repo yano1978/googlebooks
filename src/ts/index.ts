@@ -69,7 +69,7 @@ const bookPrice = () => {
   let price = Math.floor(Math.random() * 25);
   // price = 0;
   if (price > 0) {
-    return `<strong>Price ${price} &#xa3;</strong><br>Sign in to apply a first buy coupon discount of 20%`;
+    return `<strong>Price <span class="price">${price}</span> &#xa3;</strong><br>Sign in to apply a first buy coupon discount of 20%`;
   } else {
     return `<span class="not-available">We are sorry, this book is not currently available</span>`;
   }
@@ -122,17 +122,17 @@ const displayBook = (book: Book, count: number) => {
                                                       </div>
                                                       <div class="checkbox">
                                                           <label>
-                                                              <input type="checkbox" class="check"> USPS First Class - <strong>5.70 &#xa3;</strong>
+                                                              <input type="checkbox" value="5" class="check"> UPS First Class - <strong>5 &#xa3;</strong>
                                                           </label>
                                                       </div>
                                                       <div class="checkbox">
                                                           <label>
-                                                              <input type="checkbox" class="check"> Package protection- <strong>2.30 &#xa3;</strong>
+                                                              <input type="checkbox" value="2" class="check"> Package protection- <strong>2 &#xa3;</strong>
                                                           </label>
                                                       </div>
                                                       <div class="checkbox">
                                                           <label>
-                                                              <input type="checkbox" class="check"> Next Day Delivery - <strong>10 &#xa3;</strong>
+                                                              <input type="checkbox" value="10" class="check"> Next Day Delivery - <strong>10 &#xa3;</strong>
                                                           </label>
                                                       </div>
                                                   </form>
@@ -161,6 +161,33 @@ const displayBook = (book: Book, count: number) => {
 
 getBooks('game of thrones');
 
+const addShipmentPrice = () => {
+  [document.querySelectorAll('.check')].forEach(function (items) {
+    // console.log(items);
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      item.addEventListener('change', function () {
+        this.classList.toggle('checked');
+        const shipmentPrice = Math.floor(Number(this.value));
+        const bookPrice = Math.floor(
+          Number(this.closest('.modal-body').querySelector('.price').innerHTML)
+        );
+        if (this.classList.contains('checked')) {
+          this.closest('.modal-body').querySelector('.price').innerHTML =
+            shipmentPrice + bookPrice;
+        } else {
+          this.closest('.modal-body').querySelector('.price').innerHTML =
+            Math.floor(
+              Number(
+                this.closest('.modal-body').querySelector('.price').innerHTML
+              )
+            ) - shipmentPrice;
+        }
+      });
+    }
+  });
+};
+
 const checkboxesClicker = () => {
   [document.querySelectorAll('*[id^="checkall-"]')].forEach(function (inputs) {
     // console.log(inputs);
@@ -185,13 +212,33 @@ const checkboxesClicker = () => {
         const checkboxesList =
           this.parentNode.parentNode.querySelectorAll('.check');
         // console.log(checks);
+        let total = 0;
         for (let x = 0; x < checkboxesList.length; x++) {
           const singleCheck = checkboxesList[x];
-          // console.log(this);
+          total = parseInt(singleCheck.value);
+          singleCheck.classList.toggle('checked');
+          // if (singleCheck.classList.contains('checked')) {
+          //   total = parseInt(singleCheck.value);
+          // } else {
+          //   console.log('Nope');
+          // }
+          const bookPrice = Math.floor(
+            Number(
+              this.closest('.modal-body').querySelector('.price').innerHTML
+            )
+          );
           if (this.checked === true) {
             singleCheck.checked = true;
+            this.closest('.modal-body').querySelector('.price').innerHTML =
+              total + bookPrice;
           } else {
             singleCheck.checked = false;
+            this.closest('.modal-body').querySelector('.price').innerHTML =
+              Math.floor(
+                Number(
+                  this.closest('.modal-body').querySelector('.price').innerHTML
+                )
+              ) - total;
           }
         }
       });
@@ -202,7 +249,7 @@ const checkboxesClicker = () => {
 const checkboxesActivator = () => {
   checkElement('.checkall').then(() => {
     // console.log(ele);
-    // checkboxes();
+    addShipmentPrice();
     checkboxesClicker();
   });
 };
