@@ -33,8 +33,8 @@ h6.card-book {
 } */
 
 .card img {
-  /* margin: 0.75em; */
-  min-width: 100%;
+  margin: 0.75em;
+  min-width: 85%;
   width: auto;
   height: auto;
 }

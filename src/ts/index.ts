@@ -1,5 +1,13 @@
 import 'bootstrap';
-import { fromEvent, map, switchMap, tap, from, filter } from 'rxjs';
+import {
+  fromEvent,
+  map,
+  switchMap,
+  tap,
+  from,
+  filter,
+  debounceTime,
+} from 'rxjs';
 
 // declare const rxjs: any; // I can use this in production
 
@@ -43,8 +51,9 @@ const getBooks = (booktitle: string) => {
   const apiUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
   const p = fetch(apiUrl + booktitle).then((res) => res.json());
   // .then((books) => console.log(books));
-  let count = 0;
-  from(p).pipe(
+  // let count = 0;
+  return from(p).pipe(
+    tap((data: GoogleBook) => showTotal(data.items.length)),
     switchMap((data: GoogleBook) => from(data.items || [])),
     map((ele: BookItem) => {
       const book: Book = {
@@ -55,13 +64,20 @@ const getBooks = (booktitle: string) => {
         thumbnail: ele.volumeInfo.imageLinks.thumbnail,
       };
       return book;
-    }),
-    // tap((book: Book) => console.log(book))
-    tap(() => {
-      return count++;
     })
+    // tap((book: Book) => console.log(book))
+    // tap(() => {
+    //   return count++;
+    // })
   );
   // .subscribe((book: Book) => displayBook(book, count));
+};
+
+const showTotal = (total: number) => {
+  const found = document.querySelector('#found');
+  if (found) {
+    found.textContent = '' + total;
+  }
 };
 
 const bookPrice = () => {
@@ -164,16 +180,52 @@ const displayBook = (book: Book, count: number) => {
 const searchBook = () => {
   const searchEle = document.querySelector('#search');
   if (searchEle) {
+    let count = 0;
     fromEvent(searchEle, 'keyup')
       .pipe(
         map((ele: any) => ele.target.value),
-        filter((ele: string) => ele.length > 2)
+        filter((ele: string) => ele.length > 2),
+        debounceTime(1200),
+        tap(() => cleanBooks()),
+        switchMap((ele: string) => getBooks(ele)),
+        tap(() => {
+          return count++;
+        })
       )
-      .subscribe((search: string) => console.log(search));
-    getBooks('game of thrones');
+      // .subscribe((search: string) => console.log(search));
+      .subscribe((book: Book) => displayBook(book, count));
+    // getBooks('game of thrones');
   }
 };
-searchBook();
+// searchBook();
+
+const searchButtonOnClick = () => {
+  const btnSearch = document.querySelector('#searchButton');
+  btnSearch.addEventListener('click', function () {
+    const searchValue = (document.getElementById('search') as HTMLInputElement)
+      .value;
+    console.log(searchValue);
+    let count = 0;
+    if (searchValue) {
+      getBooks(searchValue)
+        .pipe(
+          tap(() => {
+            return count++;
+          })
+        )
+        .subscribe((book: Book) => displayBook(book, count));
+    }
+  });
+};
+
+searchButtonOnClick();
+
+const cleanBooks = () => {
+  const books = document.querySelector('#books');
+  if (books) {
+    books.innerHTML = '';
+  }
+};
 
 const addShipmentPrice = () => {
   [document.querySelectorAll('.check')].forEach(function (items) {
