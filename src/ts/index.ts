@@ -200,6 +200,19 @@ checkboxesActivator();
 const searchBook = () => {
   checkboxesActivator();
   const searchEle = document.querySelector('#search');
+  const searchValue = (document.getElementById('search') as HTMLInputElement)
+    .value;
+  if (searchValue === '') {
+    checkboxesActivator();
+    let count = 0;
+    getBooks('javascript')
+      .pipe(
+        tap(() => {
+          return count++;
+        })
+      )
+      .subscribe((book: Book) => displayBook(book, count));
+  }
   if (searchEle) {
     let count = 0;
     fromEvent(searchEle, 'keyup')
@@ -218,7 +231,7 @@ const searchBook = () => {
     // getBooks('game of thrones');
   }
 };
-searchBook();
+// searchBook();
 
 const searchButtonOnClick = () => {
   const btnSearch = document.querySelector('#searchButton');
@@ -355,3 +368,7 @@ const checkboxesClicker = () => {
     }
   });
 };
+
+window.addEventListener('load', function () {
+  searchBook();
+});
