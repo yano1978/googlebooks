@@ -61,7 +61,10 @@ const getBooks = (booktitle: string) => {
         categories: ele.volumeInfo.categories,
         authors: ele.volumeInfo.authors,
         description: ele.volumeInfo.description,
-        thumbnail: ele.volumeInfo.imageLinks.thumbnail,
+        thumbnail:
+          ele.volumeInfo.imageLinks === undefined
+            ? ''
+            : `${ele.volumeInfo.imageLinks.thumbnail}`,
       };
       return book;
     })
@@ -120,7 +123,7 @@ const displayBook = (book: Book, count: number) => {
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="buy-book-${count}">
+                                    <h5 class="modal-title">
                                     ${book.title}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
@@ -177,7 +180,25 @@ const displayBook = (book: Book, count: number) => {
   }
 };
 
+const checkboxesActivator = () => {
+  checkElement('.checkall').then(() => {
+    // console.log('check is ele exists');
+    addShipmentPrice();
+    checkboxesClicker();
+  });
+};
+
+const checkElement = async (ele: any) => {
+  while (document.querySelector(ele) === null) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+  return document.querySelector(ele);
+};
+
+checkboxesActivator();
+
 const searchBook = () => {
+  checkboxesActivator();
   const searchEle = document.querySelector('#search');
   if (searchEle) {
     let count = 0;
@@ -204,7 +225,7 @@ const searchButtonOnClick = () => {
   btnSearch.addEventListener('click', function () {
     const searchValue = (document.getElementById('search') as HTMLInputElement)
       .value;
-    console.log(searchValue);
+    // console.log(searchValue);
     let count = 0;
     if (searchValue) {
       cleanBooks();
@@ -225,7 +246,14 @@ const cleanSearchOnClick = () => {
   const btnSearch = document.querySelector('#cleanButton');
   btnSearch.addEventListener('click', function () {
     (document.getElementById('search') as HTMLInputElement).value = '';
-    cleanBooks();
+    const books = document.querySelector('#books');
+    const booksTotal = document.querySelector('#found');
+    // cleanBooks();
+    if (books) {
+      books.innerHTML = '';
+      booksTotal.innerHTML = '' + 0;
+      // checkboxesActivator();
+    }
   });
 };
 
@@ -235,8 +263,11 @@ getBooks('game of thrones');
 
 const cleanBooks = () => {
   const books = document.querySelector('#books');
+  const booksTotal = document.querySelector('#found');
   if (books) {
     books.innerHTML = '';
+    booksTotal.innerHTML = '' + 0;
+    checkboxesActivator();
   }
 };
 
@@ -324,19 +355,3 @@ const checkboxesClicker = () => {
     }
   });
 };
-
-const checkboxesActivator = () => {
-  checkElement('.checkall').then(() => {
-    // console.log(ele);
-    addShipmentPrice();
-    checkboxesClicker();
-  });
-};
-const checkElement = async (ele: any) => {
-  while (document.querySelector(ele) === null) {
-    await new Promise((resolve) => requestAnimationFrame(resolve));
-  }
-  return document.querySelector(ele);
-};
-
-checkboxesActivator();
